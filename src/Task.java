@@ -1,12 +1,15 @@
 public class Task {
-    private String name;
-    private String description;
-    private int id;
-    private TaskStatus taskStatus;
+    protected String name;
+    protected String description;
+    protected int id;
+    protected TaskStatus taskStatus;
     public Task(String name, String description) {
+        this(name, description, TaskStatus.NEW);
+    }
+    public Task(String name, String description, TaskStatus taskStatus) {
         this.name = name;
         this.description = description;
-        this.taskStatus= TaskStatus.NEW;
+        this.taskStatus= taskStatus;
     }
 
     public String getName() {
@@ -41,4 +44,5 @@ public class Task {
     public void setTaskStatus(TaskStatus taskStatus) {
         this.taskStatus = taskStatus;
     }
+
 }

@@ -12,7 +12,15 @@ public class Epic extends Task {
     }
 
     public ArrayList<Subtask> getSubtasks() {
-        return subtasks;
+        return new ArrayList<>(subtasks);
+    }
+
+    public void removeSubtask(Subtask subtask) {
+        subtasks.remove(subtask);
+    }
+
+    public void clearSubtasks() {
+        subtasks.clear();
     }
 
     public void updateStatus() {
@@ -20,26 +28,22 @@ public class Epic extends Task {
             setTaskStatus(TaskStatus.NEW);
             return;
         }
+
         boolean allDone = true;
         boolean hasInProgress = false;
+
         for (Subtask subtask : subtasks) {
             TaskStatus status = subtask.getTaskStatus();
 
-            switch (status) {
-                case NEW:
-                    allDone = false;
-                    hasInProgress = false;
-                    break;
+            if (status == TaskStatus.IN_PROGRESS) {
+                hasInProgress = true;
+            }
 
-                case IN_PROGRESS:
-                    allDone = false;
-                    hasInProgress = true;
-                    break;
-
-                case DONE:
-                    break;
+            if (status != TaskStatus.DONE) {
+                allDone = false;
             }
         }
+
         if (hasInProgress) {
             setTaskStatus(TaskStatus.IN_PROGRESS);
         } else if (allDone) {
@@ -47,7 +51,6 @@ public class Epic extends Task {
         } else {
             setTaskStatus(TaskStatus.NEW);
         }
-
     }
 }
 

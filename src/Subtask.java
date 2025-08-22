@@ -1,18 +1,12 @@
 public class Subtask extends Task{
-    private final Epic epicParent;
-    public Subtask(String name, String description, Epic epicParent) {
+    private final int epicId;
+    public Subtask(String name, String description, int epicId) {
         super(name, description);
-        this.epicParent = epicParent;
+        this.epicId = epicId;
     }
-    @Override
-    public void setTaskStatus(TaskStatus taskStatus) {
-        super.setTaskStatus(taskStatus);
-        if (epicParent != null) {
-            epicParent.updateStatus();
-        }
-    }
-    public Epic getEpicParent() {
-        return epicParent;
+
+    public int getEpicId() {
+        return epicId;
     }
 }
 
