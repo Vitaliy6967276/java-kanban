@@ -44,5 +44,14 @@ public class Task {
     public void setTaskStatus(TaskStatus taskStatus) {
         this.taskStatus = taskStatus;
     }
-
+    @Override
+    public String toString() {
+        return String.format(
+                "ID: %s\n" +
+                        "Название: %s\n" +
+                        "Описание: %s\n" +
+                        "Статус: %s\n",
+                id, name, description, taskStatus
+        );
+    }
 }
