@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Epic extends Task {
     private final ArrayList<Subtask> subtasks = new ArrayList<>();
@@ -8,6 +9,9 @@ public class Epic extends Task {
     }
 
     public void addSubtask(Subtask subtask) {
+        if (subtask.getId() == this.getId()) {
+            throw new IllegalArgumentException("Подзадача не может иметь тот же ID, что и эпик");
+        }
         subtasks.add(subtask);
     }
 
@@ -51,6 +55,18 @@ public class Epic extends Task {
         } else {
             setTaskStatus(TaskStatus.NEW);
         }
+    }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Epic epic = (Epic) o;
+        return getId() == epic.getId();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
     }
 }
 
