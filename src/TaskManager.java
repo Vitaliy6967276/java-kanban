@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 public interface TaskManager {
 
-    int generateId();
+
 
     List<Task> getAllTasks();
     List<Epic> getAllEpics();
