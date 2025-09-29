@@ -2,23 +2,26 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
+
 public class InMemoryHistoryManager implements HistoryManager {
 
     public class Node {
         public Task task;
         public Node prev;
         public Node next;
+
         public Node(Task task) {
             this.task = task;
         }
     }
+
     private final Map<Integer, Node> taskMap = new HashMap<>();
     private Node head;
     private Node tail;
 
     public void linkLast(Task task) {
         Node newNode = new Node(task);
-        if(head == null) {
+        if (head == null) {
             head = tail = newNode;
         } else {
             tail.next = newNode;
@@ -26,22 +29,24 @@ public class InMemoryHistoryManager implements HistoryManager {
             tail = newNode;
         }
     }
+
     public void removeNode(Node node) {
-        if(node == null) {
+        if (node == null) {
             return;
         }
-        if(node.prev != null) {
+        if (node.prev != null) {
             node.prev.next = node.next;
         } else {
             head = node.next;
         }
-        if(node.next != null) {
+        if (node.next != null) {
             node.next.prev = node.prev;
         } else {
             tail = node.prev;
         }
         taskMap.remove(node.task.getId());
     }
+
     @Override
     public void add(Task task) {
         int taskId = task.getId();
@@ -62,6 +67,7 @@ public class InMemoryHistoryManager implements HistoryManager {
 
         taskMap.put(taskId, newNode);
     }
+
     public List<Task> getTasks() {
         List<Task> result = new ArrayList<>();
         Node current = head;
@@ -71,15 +77,17 @@ public class InMemoryHistoryManager implements HistoryManager {
         }
         return result;
     }
+
     @Override
     public List<Task> getHistory() {
         return getTasks();
 
     }
+
     @Override
     public void remove(int id) {
         Node node = taskMap.remove(id);
-        if(node != null) {
+        if (node != null) {
             removeNode(node);
         }
 

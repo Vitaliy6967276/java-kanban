@@ -10,10 +10,11 @@ public class Task {
     public Task(String name, String description) {
         this(name, description, TaskStatus.NEW);
     }
+
     public Task(String name, String description, TaskStatus taskStatus) {
         this.name = name;
         this.description = description;
-        this.taskStatus= taskStatus;
+        this.taskStatus = taskStatus;
     }
 
     public String getName() {
@@ -37,6 +38,7 @@ public class Task {
     public int getId() {
         return id;
     }
+
     public void setId(int id) {
         this.id = id;
     }
@@ -48,6 +50,7 @@ public class Task {
     public void setTaskStatus(TaskStatus taskStatus) {
         this.taskStatus = taskStatus;
     }
+
     @Override
     public String toString() {
         return String.format(
@@ -58,6 +61,7 @@ public class Task {
                 id, name, description, taskStatus
         );
     }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

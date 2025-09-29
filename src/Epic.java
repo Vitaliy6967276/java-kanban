@@ -57,6 +57,7 @@ public class Epic extends Task {
             setTaskStatus(TaskStatus.NEW);
         }
     }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

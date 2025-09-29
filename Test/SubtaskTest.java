@@ -1,5 +1,7 @@
 import static org.junit.jupiter.api.Assertions.*;
+
 import org.junit.jupiter.api.*;
+
 class SubtaskTest {
 
     @Test
@@ -12,5 +14,4 @@ class SubtaskTest {
 
         assertEquals(subtask1, subtask2);
     }
-
 }

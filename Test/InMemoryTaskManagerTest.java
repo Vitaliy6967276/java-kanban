@@ -1,9 +1,13 @@
 import static org.junit.jupiter.api.Assertions.*;
+
 import org.junit.jupiter.api.*;
+
 import java.util.List;
+
 class InMemoryTaskManagerTest {
 
     private InMemoryTaskManager manager;
+
     @BeforeEach
     void setUp() {
         manager = new InMemoryTaskManager();
@@ -33,6 +37,7 @@ class InMemoryTaskManagerTest {
         assertEquals(task1, manager.getTaskById(1));
         assertEquals(task2, manager.getTaskById(2));
     }
+
     @Test
     void testTaskImmutability() {
         Task original = new Task("Задача", "Описание");
@@ -44,6 +49,7 @@ class InMemoryTaskManagerTest {
         assertEquals(original.getDescription(), added.getDescription());
         assertEquals(original.getTaskStatus(), added.getTaskStatus());
     }
+
     @Test
     void testHistoryNoDuplicates() {
         Task task = manager.generateTask(new Task("Задача", "Описание"));
@@ -57,6 +63,7 @@ class InMemoryTaskManagerTest {
         assertEquals(1, history.size()); // Должен быть только один элемент
         assertEquals(task, history.get(0));
     }
+
     @Test
     void testHistoryReorder() {
         Task task1 = manager.generateTask(new Task("Задача 1", "Описание 1"));
@@ -85,6 +92,7 @@ class InMemoryTaskManagerTest {
         assertEquals(task1, history.get(0)); // Теперь task1 должен быть первым
         assertEquals(task2, history.get(1));
     }
+
     @Test
     void testHistoryRemoval() {
         Task task = manager.generateTask(new Task("Задача", "Описание"));
@@ -103,5 +111,4 @@ class InMemoryTaskManagerTest {
         List<Task> newHistory = manager.getHistory();
         assertTrue(newHistory.isEmpty());
     }
-
 }
