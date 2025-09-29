@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 public interface TaskManager {
 
-
-
     List<Task> getAllTasks();
     List<Epic> getAllEpics();
     List<Subtask> getAllSubtasks();

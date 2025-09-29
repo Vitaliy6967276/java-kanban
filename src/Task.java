@@ -1,10 +1,12 @@
 import java.util.Objects;
 
 public class Task {
+
     protected String name;
     protected String description;
     protected int id;
     protected TaskStatus taskStatus;
+
     public Task(String name, String description) {
         this(name, description, TaskStatus.NEW);
     }

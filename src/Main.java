@@ -1,4 +1,5 @@
 public class Main {
+
     public static void main(String[] args) {
         InMemoryTaskManager manager = new InMemoryTaskManager();
         Task task1 = manager.generateTask(new Task("Задача 1", "Описание задачи 1"));

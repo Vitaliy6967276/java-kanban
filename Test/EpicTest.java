@@ -1,6 +1,7 @@
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.*;
 class EpicTest {
+
     @Test
     void testEpicEqualityById() {
         Epic epic1 = new Epic("Эпик 1", "Описание 1");

@@ -2,8 +2,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
+public class InMemoryHistoryManager implements HistoryManager {
 
-public class InMemoryHistoryManager implements HistoryManager{
     public class Node {
         public Task task;
         public Node prev;

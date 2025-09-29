@@ -1,6 +1,7 @@
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.*;
 class SubtaskTest {
+
     @Test
     void testSubtaskEqualityById() {
         Subtask subtask1 = new Subtask("Подзадача 1", "Описание 1", 1);
