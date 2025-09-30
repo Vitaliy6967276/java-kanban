@@ -1,5 +1,7 @@
 import static org.junit.jupiter.api.Assertions.*;
 
+import Tasks.Epic;
+import Tasks.Subtask;
 import org.junit.jupiter.api.*;
 
 class EpicTest {

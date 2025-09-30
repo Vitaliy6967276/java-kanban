@@ -1,3 +1,9 @@
+import Managers.InMemoryTaskManager;
+import Managers.TaskManager;
+import Tasks.Epic;
+import Tasks.Subtask;
+import Tasks.Task;
+
 public class Main {
 
     public static void main(String[] args) {
@@ -19,21 +25,21 @@ public class Main {
         manager.getEpicById(epic1.getId());
         printHistory(manager);
         /* System.out.println("Все задачи:");
-        for (Task task : manager.getAllTasks()) {
+        for (Task.Task task : manager.getAllTasks()) {
             System.out.println("- " + task.getName() + " (ID: " + task.getId() + ")");
         }
         System.out.println("\nВсе эпики:");
-        for (Epic epic : manager.getAllEpics()) {
+        for (Task.Epic epic : manager.getAllEpics()) {
             System.out.println("- " + epic.getName() + " (ID: " + epic.getId() + ")");
         }
         System.out.println("\nВсе подзадачи:");
-        for (Subtask subtask : manager.getAllSubtasks()) {
+        for (Task.Subtask subtask : manager.getAllSubtasks()) {
             System.out.println("- " + subtask.getName() + " (ID: " + subtask.getId() + ")");
         }
-        task1.setTaskStatus(TaskStatus.IN_PROGRESS);
-        subtask1.setTaskStatus(TaskStatus.DONE);
-        subtask2.setTaskStatus(TaskStatus.IN_PROGRESS);
-        subtask3.setTaskStatus(TaskStatus.DONE);
+        task1.setTaskStatus(Task.TaskStatus.IN_PROGRESS);
+        subtask1.setTaskStatus(Task.TaskStatus.DONE);
+        subtask2.setTaskStatus(Task.TaskStatus.IN_PROGRESS);
+        subtask3.setTaskStatus(Task.TaskStatus.DONE);
         System.out.println("\nПосле изменения статусов:");
         System.out.println("Статус задачи 1: " + task1.getTaskStatus());
         System.out.println("Статус подзадачи 1.1: " + subtask1.getTaskStatus());
