@@ -1,6 +1,6 @@
 import static org.junit.jupiter.api.Assertions.*;
 
-import Tasks.Task;
+import tasks.Task;
 import org.junit.jupiter.api.*;
 
 class TaskTest {

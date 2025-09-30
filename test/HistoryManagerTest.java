@@ -1,7 +1,7 @@
 import static org.junit.jupiter.api.Assertions.*;
 
-import Managers.InMemoryTaskManager;
-import Tasks.Task;
+import managers.InMemoryTaskManager;
+import tasks.Task;
 import org.junit.jupiter.api.*;
 
 import java.util.List;

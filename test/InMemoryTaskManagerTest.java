@@ -1,10 +1,10 @@
 import static org.junit.jupiter.api.Assertions.*;
 
-import Managers.InMemoryTaskManager;
-import Tasks.Epic;
-import Tasks.Subtask;
-import Tasks.Task;
-import Tasks.TaskStatus;
+import managers.InMemoryTaskManager;
+import tasks.Epic;
+import tasks.Subtask;
+import tasks.Task;
+import tasks.TaskStatus;
 import org.junit.jupiter.api.*;
 
 class InMemoryTaskManagerTest {

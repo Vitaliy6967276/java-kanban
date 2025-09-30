@@ -1,6 +1,6 @@
 import static org.junit.jupiter.api.Assertions.*;
 
-import Tasks.Subtask;
+import tasks.Subtask;
 import org.junit.jupiter.api.*;
 
 class SubtaskTest {
