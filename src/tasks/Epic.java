@@ -1,7 +1,10 @@
+package tasks;
+
 import java.util.ArrayList;
 import java.util.Objects;
 
 public class Epic extends Task {
+
     private final ArrayList<Subtask> subtasks = new ArrayList<>();
 
     public Epic(String name, String description) {
@@ -56,6 +59,7 @@ public class Epic extends Task {
             setTaskStatus(TaskStatus.NEW);
         }
     }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

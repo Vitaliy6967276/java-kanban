@@ -1,6 +1,11 @@
 import static org.junit.jupiter.api.Assertions.*;
+
+import tasks.Epic;
+import tasks.Subtask;
 import org.junit.jupiter.api.*;
+
 class EpicTest {
+
     @Test
     void testEpicEqualityById() {
         Epic epic1 = new Epic("Эпик 1", "Описание 1");
@@ -11,6 +16,7 @@ class EpicTest {
 
         assertEquals(epic1, epic2);
     }
+
     @Test
     void testEpicCannotAddSelfAsSubtask() {
         Epic epic = new Epic("Эпик", "Описание");

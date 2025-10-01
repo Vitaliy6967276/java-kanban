@@ -1,6 +1,10 @@
 import static org.junit.jupiter.api.Assertions.*;
+
+import tasks.Task;
 import org.junit.jupiter.api.*;
+
 class TaskTest {
+
     @Test
     void testTaskEqualityById() {
         Task task1 = new Task("Задача 1", "Описание 1");

@@ -1,7 +1,16 @@
 import static org.junit.jupiter.api.Assertions.*;
+
+import managers.InMemoryTaskManager;
+import tasks.Epic;
+import tasks.Subtask;
+import tasks.Task;
+import tasks.TaskStatus;
 import org.junit.jupiter.api.*;
+
 class InMemoryTaskManagerTest {
+
     private InMemoryTaskManager manager;
+
     @BeforeEach
     void setUp() {
         manager = new InMemoryTaskManager();
@@ -31,6 +40,7 @@ class InMemoryTaskManagerTest {
         assertEquals(task1, manager.getTaskById(1));
         assertEquals(task2, manager.getTaskById(2));
     }
+
     @Test
     void testTaskImmutability() {
         Task original = new Task("Задача", "Описание");
