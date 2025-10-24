@@ -13,13 +13,29 @@ import java.util.HashMap;
 public class InMemoryTaskManager implements TaskManager {
 
     private final Map<Integer, Task> tasks = new HashMap<>();
-    private final Map<Integer, Epic> epics = new HashMap<>();
+    protected final Map<Integer, Epic> epics = new HashMap<>();
     private final Map<Integer, Subtask> subtasks = new HashMap<>();
-    private volatile int idCounter = 0;
+    protected volatile int idCounter = 0;
     private final HistoryManager historyManager = Managers.getDefaultHistory();
 
     private int generateId() {
         return ++idCounter;
+    }
+
+    protected void addTask(Task task) {
+        tasks.put(task.getId(), task);
+    }
+
+    protected void addEpic(Epic epic) {
+        epics.put(epic.getId(), epic);
+    }
+
+    protected void addSubtask(Subtask subtask) {
+        subtasks.put(subtask.getId(), subtask);
+        Epic parentEpic = epics.get(subtask.getEpicId());
+        if (parentEpic != null) {
+            parentEpic.addSubtask(subtask);
+        }
     }
 
     @Override
