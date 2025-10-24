@@ -37,6 +37,10 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         }
     }
 
+    public void forceSaveForTests() {
+        save();
+    }
+
     private String toString(Task task) {
         TaskType type;
         String epicId;

@@ -33,7 +33,7 @@ public class FileBackedTaskManagerTest {
     @Test
     void shouldSaveAndLoadEmptyManager() throws IOException {
         // Сохраняем пустое состояние
-        manager.save();
+        manager.forceSaveForTests();
 
         // Проверяем, что файл создан и содержит только заголовок
         String content = Files.readString(tempFile.toPath());
