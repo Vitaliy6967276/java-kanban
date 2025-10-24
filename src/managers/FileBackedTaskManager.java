@@ -7,7 +7,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.util.*;
 
-public class FileBackedTaskManager extends InMemoryTaskManager implements TaskManager {
+public class FileBackedTaskManager extends InMemoryTaskManager {
     private final File file;
 
     public FileBackedTaskManager(File file) {
@@ -15,7 +15,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
         loadFromFile();
     }
 
-    public void save() {
+    private void save() {
         try {
             StringBuilder sb = new StringBuilder();
             sb.append("id,type,name,status,description,epic\n");
@@ -97,19 +97,35 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
             List<String> lines = Files.readAllLines(file.toPath());
             if (lines.size() <= 1) return;
 
+            int maxId = 0;
+            List<Task> tasksToAdd = new ArrayList<>();
+
             for (int i = 1; i < lines.size(); i++) {
                 String line = lines.get(i);
                 if (line.trim().isEmpty()) continue;
                 Task task = fromString(line);
-
-                if (task instanceof Epic) {
-                    generateEpic((Epic) task);
-                } else if (task instanceof Subtask) {
-                    generateSubtask((Subtask) task);
-                } else {
-                    generateTask(task);
+                tasksToAdd.add(task);
+                if (task.getId() > maxId) {
+                    maxId = task.getId();
                 }
             }
+
+            this.idCounter = maxId + 1;
+
+            for (Task task : tasksToAdd) {
+                if (task instanceof Epic) {
+                    addEpic((Epic) task);
+                } else if (task instanceof Subtask) {
+                    addSubtask((Subtask) task);
+                } else {
+                    addTask(task);
+                }
+            }
+
+            for (Epic epic : epics.values()) {
+                epic.updateStatus();
+            }
+
         } catch (IOException e) {
             throw new ManagerSaveException("Ошибка чтения файла", e);
         }
