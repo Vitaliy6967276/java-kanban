@@ -1,5 +1,7 @@
 package tasks;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Task {
@@ -8,15 +10,57 @@ public class Task {
     protected String description;
     protected int id;
     protected TaskStatus taskStatus;
+    protected Duration duration;
+    protected LocalDateTime startTime;
 
     public Task(String name, String description) {
-        this(name, description, TaskStatus.NEW);
+        this(name, description, TaskStatus.NEW, null, null);
     }
 
     public Task(String name, String description, TaskStatus taskStatus) {
+        this(name, description, taskStatus, null, null);
+    }
+
+    public Task(String name, String description, TaskStatus taskStatus,
+                Duration duration, LocalDateTime startTime) {
         this.name = name;
         this.description = description;
         this.taskStatus = taskStatus;
+        this.duration = duration;
+        this.startTime = startTime;
+    }
+
+    public boolean isOverlapping(Task other) {
+        if (this.startTime == null || this.duration == null ||
+                other.startTime == null || other.duration == null) {
+            return false;
+        }
+        LocalDateTime thisEnd = this.getEndTime();
+        LocalDateTime otherEnd = other.getEndTime();
+        return this.startTime.isBefore(otherEnd) && other.startTime.isBefore(thisEnd);
+    }
+
+    public Duration getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public LocalDateTime getEndTime() {
+        if (startTime == null || duration == null) {
+            return null;
+        }
+        return startTime.plus(duration);
     }
 
     public String getName() {
