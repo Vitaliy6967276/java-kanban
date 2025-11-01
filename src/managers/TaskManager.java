@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface TaskManager {
 
+    List<Task> getPrioritizedTasks();
+
     List<Task> getAllTasks();
 
     List<Epic> getAllEpics();

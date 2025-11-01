@@ -1,55 +1,73 @@
-import static org.junit.jupiter.api.Assertions.*;
-
 import managers.InMemoryTaskManager;
+import org.junit.jupiter.api.*;
 import tasks.Epic;
 import tasks.Subtask;
 import tasks.Task;
 import tasks.TaskStatus;
-import org.junit.jupiter.api.*;
 
-class InMemoryTaskManagerTest {
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.List;
 
-    private InMemoryTaskManager manager;
+import static org.junit.jupiter.api.Assertions.*;
 
-    @BeforeEach
-    void setUp() {
-        manager = new InMemoryTaskManager();
+public class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
+
+
+    @Override
+    InMemoryTaskManager createManager() {
+        return new InMemoryTaskManager();
+    }
+
+
+    @Test
+    void generateEpic_shouldHaveNoSubtasksInitially() {
+        Epic epic = manager.generateEpic(new Epic("Эпик", ""));
+        assertEquals(0, manager.getSubtasksByEpic(epic.getId()).size());
     }
 
     @Test
-    void testAddAndFindTasks() {
-        Task task = manager.generateTask(new Task("Задача", "Описание"));
-        Epic epic = manager.generateEpic(new Epic("Эпик", "Описание"));
-        Subtask subtask = manager.generateSubtask(new Subtask("Подзадача", "Описание", epic.getId()));
+    void updateEpic_shouldPreserveSubtasks() {
+        Epic epic = manager.generateEpic(new Epic("Старый", ""));
+        Subtask subtask = manager.generateSubtask(
+                new Subtask("Подзадача", "", epic.getId()));
 
-        assertNotNull(manager.getTaskById(task.getId()));
-        assertNotNull(manager.getEpicById(epic.getId()));
-        assertNotNull(manager.getSubtaskById(subtask.getId()));
+        Epic updatedEpic = new Epic("Новый", "Описание");
+        updatedEpic.setId(epic.getId());
+        manager.updateEpic(updatedEpic);
+
+        assertEquals(1, manager.getSubtasksByEpic(epic.getId()).size());
+        assertEquals(subtask.getId(),
+                manager.getSubtasksByEpic(epic.getId()).get(0).getId());
     }
 
     @Test
-    void testIdConflicts() {
-        Task task1 = new Task("Задача", "Описание");
-        task1.setId(1);
-        manager.generateTask(task1);
+    void deleteEpic_shouldRemoveAllSubtasks() {
+        Epic epic = manager.generateEpic(new Epic("Эпик", ""));
+        Subtask s1 = manager.generateSubtask(new Subtask("S1", "", epic.getId()));
+        Subtask s2 = manager.generateSubtask(new Subtask("S2", "", epic.getId()));
 
-        Task task2 = new Task("Другая задача", "Другое описание");
-        task2.setId(2);
-        manager.generateTask(task2);
+        manager.deleteEpic(epic.getId());
 
-        assertEquals(task1, manager.getTaskById(1));
-        assertEquals(task2, manager.getTaskById(2));
+        assertNull(manager.getSubtaskById(s1.getId()));
+        assertNull(manager.getSubtaskById(s2.getId()));
+        assertNull(manager.getEpicById(epic.getId()));
     }
 
     @Test
-    void testTaskImmutability() {
-        Task original = new Task("Задача", "Описание");
-        original.setTaskStatus(TaskStatus.IN_PROGRESS);
+    void getPrioritizedTasks_shouldSortByStartTime() {
+        LocalDateTime t1Time = LocalDateTime.of(2025, 10, 1, 12, 0);
+        LocalDateTime t2Time = LocalDateTime.of(2025, 10, 1, 10, 0);
 
-        Task added = manager.generateTask(original);
+        Task t1 = new Task("Поздняя", "", TaskStatus.NEW, Duration.ofHours(1), t1Time);
+        Task t2 = new Task("Ранняя", "", TaskStatus.NEW, Duration.ofHours(1), t2Time);
 
-        assertEquals(original.getName(), added.getName());
-        assertEquals(original.getDescription(), added.getDescription());
-        assertEquals(original.getTaskStatus(), added.getTaskStatus());
+
+        manager.generateTask(t1);
+        manager.generateTask(t2);
+
+        List<Task> prioritized = manager.getPrioritizedTasks();
+        assertEquals(t2.getId(), prioritized.get(0).getId()); // Ранняя задача первая
+        assertEquals(t1.getId(), prioritized.get(1).getId()); // Поздняя задача вторая
     }
 }
