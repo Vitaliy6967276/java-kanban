@@ -9,29 +9,22 @@ public class Epic extends Task {
 
     private final ArrayList<Subtask> subtasks = new ArrayList<>();
     private LocalDateTime endTime;
+    private LocalDateTime startTime;
+    private Duration duration;
 
     public Epic(String name, String description) {
         super(name, description);
+        updateEpicTime();
     }
 
     @Override
     public Duration getDuration() {
-        Duration total = Duration.ZERO;
-        for (Subtask subtask : subtasks) {
-            if (subtask.getDuration() != null) {
-                total = total.plus(subtask.getDuration());
-            }
-        }
-        return total;
+        return duration;
     }
 
     @Override
     public LocalDateTime getStartTime() {
-        return subtasks.stream()
-                .map(Subtask::getStartTime)
-                .filter(startTime -> startTime != null)
-                .min(LocalDateTime::compareTo)
-                .orElse(null);
+        return startTime;
     }
 
     @Override
@@ -39,15 +32,12 @@ public class Epic extends Task {
         return endTime;
     }
 
-    public void setEndTime(LocalDateTime endTime) {
-        this.endTime = endTime;
-    }
-
     public void addSubtask(Subtask subtask) {
         if (subtask.getId() == this.getId()) {
             throw new IllegalArgumentException("Подзадача не может иметь тот же ID, что и эпик");
         }
         subtasks.add(subtask);
+        updateEpicTime();
     }
 
     public ArrayList<Subtask> getSubtasks() {
@@ -56,10 +46,12 @@ public class Epic extends Task {
 
     public void removeSubtask(Subtask subtask) {
         subtasks.remove(subtask);
+        updateEpicTime();
     }
 
     public void clearSubtasks() {
         subtasks.clear();
+        updateEpicTime();
     }
 
     public void updateStatus() {
@@ -93,6 +85,13 @@ public class Epic extends Task {
     }
 
     public void updateEpicTime() {
+        Duration total = Duration.ZERO;
+        for (Subtask subtask : subtasks) {
+            if (subtask.getDuration() != null) {
+                total = total.plus(subtask.getDuration());
+            }
+        }
+
         LocalDateTime earliestStart = subtasks.stream()
                 .map(Subtask::getStartTime)
                 .filter(Objects::nonNull)
@@ -105,8 +104,9 @@ public class Epic extends Task {
                 .max(LocalDateTime::compareTo)
                 .orElse(null);
 
-        setStartTime(earliestStart);
-        setEndTime(latestEnd);
+        this.duration = total;
+        this.startTime = earliestStart;
+        this.endTime = latestEnd;
     }
 
     @Override

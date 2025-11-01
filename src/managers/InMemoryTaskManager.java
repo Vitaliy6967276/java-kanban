@@ -43,10 +43,7 @@ public class InMemoryTaskManager implements TaskManager {
         if (task.getStartTime() == null || task.getDuration() == null) {
             return false;
         }
-        List<Task> allTasks = new ArrayList<>();
-        allTasks.addAll(getAllTasks());
-        allTasks.addAll(getAllSubtasks());
-        return allTasks.stream()
+        return prioritizedTasks.stream()
                 .filter(existingTask -> existingTask.getId() != task.getId())
                 .anyMatch(existingTask -> task.isOverlapping(existingTask));
     }
@@ -79,13 +76,12 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void removeAllTasks() {
-        for (int id : tasks.keySet()) {
-            historyManager.remove(id);
-            Task task = tasks.get(id);
-            if (task != null && task.getStartTime() != null) {
-                prioritizedTasks.remove(task);
-            }
-        }
+        tasks.keySet().stream()
+                .forEach(id -> {
+                    historyManager.remove(id);
+                    Task task = tasks.get(id);
+                    prioritizedTasks.remove(task);
+                });
         tasks.clear();
     }
 
@@ -102,10 +98,6 @@ public class InMemoryTaskManager implements TaskManager {
 
         epics.keySet().forEach(id -> {
             historyManager.remove(id);
-            Epic epic = epics.get(id);
-            if (epic.getStartTime() != null) {
-                prioritizedTasks.remove(epic);
-            }
         });
         subtasks.clear();
         epics.clear();
@@ -116,9 +108,7 @@ public class InMemoryTaskManager implements TaskManager {
         subtasks.keySet().forEach(id -> {
             historyManager.remove(id);
             Subtask subtask = subtasks.get(id);
-            if (subtask != null && subtask.getStartTime() != null) {
-                prioritizedTasks.remove(subtask);
-            }
+            prioritizedTasks.remove(subtask);
         });
         subtasks.clear();
 

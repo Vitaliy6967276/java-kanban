@@ -135,10 +135,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 return task;
             case EPIC:
                 Epic epic = new Epic(name, description);
-                epic.setTaskStatus(status);
                 epic.setId(id);
-                epic.setStartTime(startTime);
-                epic.setEndTime(endTime);
+                epic.setTaskStatus(status);
                 return epic;
             case SUBTASK:
                 int epicId = Integer.parseInt(epicIdStr);
