@@ -1,5 +1,6 @@
 package managers;
 
+import exceptions.TaskNotFoundException;
 import tasks.Task;
 import tasks.Epic;
 import tasks.Subtask;
@@ -22,11 +23,11 @@ public interface TaskManager {
 
     void removeAllSubtasks();
 
-    Task getTaskById(int id);
+    Task getTaskById(int id) throws TaskNotFoundException;
 
-    Epic getEpicById(int id);
+    Epic getEpicById(int id) throws TaskNotFoundException;
 
-    Subtask getSubtaskById(int id);
+    Subtask getSubtaskById(int id) throws TaskNotFoundException;
 
     Task generateTask(Task task);
 

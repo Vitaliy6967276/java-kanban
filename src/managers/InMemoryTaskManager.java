@@ -1,5 +1,6 @@
 package managers;
 
+import exceptions.TaskNotFoundException;
 import history.HistoryManager;
 import tasks.Epic;
 import tasks.Subtask;
@@ -122,27 +123,33 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Task getTaskById(int id) {
         Task task = tasks.get(id);
-        if (task != null) {
-            historyManager.add(task);
+        if (task == null) {
+            throw new TaskNotFoundException("Задача с ID " + id + " не найдена");
         }
+        historyManager.add(task);
+
         return task;
     }
 
     @Override
     public Epic getEpicById(int id) {
         Epic epic = epics.get(id);
-        if (epic != null) {
-            historyManager.add(epic);
+        if (epic == null) {
+            throw new TaskNotFoundException("Эпик с ID " + id + " не найдена");
         }
+        historyManager.add(epic);
+
         return epic;
     }
 
     @Override
     public Subtask getSubtaskById(int id) {
         Subtask subtask = subtasks.get(id);
-        if (subtask != null) {
-            historyManager.add(subtask);
+        if (subtask == null) {
+            throw new TaskNotFoundException("Подзадача с ID " + id + " не найдена");
         }
+        historyManager.add(subtask);
+
         return subtask;
     }
 
@@ -223,6 +230,8 @@ public class InMemoryTaskManager implements TaskManager {
         Epic existingEpic = epics.get(newEpic.getId());
         existingEpic.setName(newEpic.getName());
         existingEpic.setDescription(newEpic.getDescription());
+        existingEpic.updateEpicTime();
+        existingEpic.updateStatus();
     }
 
     @Override
