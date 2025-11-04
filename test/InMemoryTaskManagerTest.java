@@ -1,3 +1,4 @@
+import exceptions.TaskNotFoundException;
 import managers.InMemoryTaskManager;
 import org.junit.jupiter.api.*;
 import tasks.Epic;
@@ -48,10 +49,9 @@ public class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager
         Subtask s2 = manager.generateSubtask(new Subtask("S2", "", epic.getId()));
 
         manager.deleteEpic(epic.getId());
-
-        assertNull(manager.getSubtaskById(s1.getId()));
-        assertNull(manager.getSubtaskById(s2.getId()));
-        assertNull(manager.getEpicById(epic.getId()));
+        assertThrows(TaskNotFoundException.class, () -> manager.getSubtaskById(s1.getId()));
+        assertThrows(TaskNotFoundException.class, () -> manager.getSubtaskById(s2.getId()));
+        assertThrows(TaskNotFoundException.class, () -> manager.getEpicById(epic.getId()));
     }
 
     @Test
