@@ -215,5 +215,11 @@ public class SubstackHandler extends BaseHttpHandler implements HttpHandler {
         }
     }
 
-    enum Endpoint {GET_SUBTASKS, GET_SUBTASK_BY_ID, POST_SUBTASK, DELETE_SUBTASK, UNKNOWN}
+    enum Endpoint {
+        GET_SUBTASKS,
+        GET_SUBTASK_BY_ID,
+        POST_SUBTASK,
+        DELETE_SUBTASK,
+        UNKNOWN
+    }
 }

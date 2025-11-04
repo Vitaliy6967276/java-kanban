@@ -8,7 +8,6 @@ import managers.TaskManager;
 import tasks.Task;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -18,7 +17,7 @@ import java.util.Optional;
 
 public class TaskHandler extends BaseHttpHandler implements HttpHandler {
     private final TaskManager taskManager;
-    private Gson gson = new Gson();
+    private final Gson gson;
 
     public TaskHandler(TaskManager taskManager) {
         this.taskManager = taskManager;
@@ -54,7 +53,6 @@ public class TaskHandler extends BaseHttpHandler implements HttpHandler {
                     break;
             }
         } catch (Exception e) {
-            e.printStackTrace();
             sendInternalServerError(exchange);
         }
     }
@@ -154,8 +152,7 @@ public class TaskHandler extends BaseHttpHandler implements HttpHandler {
                 if (requestMethod.equals("DELETE")) {
                     return Endpoint.DELETE_TASK;
                 }
-            } catch (NumberFormatException e) {
-                throw e;
+            } catch (NumberFormatException ignored) {
             }
         }
 
@@ -217,5 +214,11 @@ public class TaskHandler extends BaseHttpHandler implements HttpHandler {
         }
     }
 
-    enum Endpoint { GET_TASKS, GET_TASK_BY_ID, POST_TASK, DELETE_TASK, UNKNOWN }
+    enum Endpoint {
+        GET_TASKS,
+        GET_TASK_BY_ID,
+        POST_TASK,
+        DELETE_TASK,
+        UNKNOWN
+    }
 }
