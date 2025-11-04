@@ -96,7 +96,6 @@ public class EpicHandler extends BaseHttpHandler implements HttpHandler {
             epic = gson.fromJson(requestBody, Epic.class);
         } catch (Exception e) {
             writeResponse(exchange, "Некорректный JSON");
-            e.printStackTrace();
             return;
         }
 
@@ -182,7 +181,7 @@ public class EpicHandler extends BaseHttpHandler implements HttpHandler {
                 if (requestMethod.equals("DELETE")) {
                     return Endpoint.DELETE_EPIC;
                 }
-            } catch (NumberFormatException e) {
+            } catch (NumberFormatException ignored) {
             }
         }
         if (pathParts.length == 4 && pathParts[1].equals("epics") && pathParts[3].equals("subtasks")) {
@@ -191,7 +190,7 @@ public class EpicHandler extends BaseHttpHandler implements HttpHandler {
                 if (requestMethod.equals("GET")) {
                     return Endpoint.GET_EPIC_SUBTASKS;
                 }
-            } catch (NumberFormatException e) {
+            } catch (NumberFormatException ignored) {
             }
         }
 

@@ -55,7 +55,6 @@ public class SubstackHandler extends BaseHttpHandler implements HttpHandler {
             }
         } catch (Exception e) {
             sendInternalServerError(exchange);
-            e.printStackTrace();
         }
     }
 
@@ -153,7 +152,8 @@ public class SubstackHandler extends BaseHttpHandler implements HttpHandler {
                 if (requestMethod.equals("DELETE")) {
                     return Endpoint.DELETE_SUBTASK;
                 }
-            } catch (NumberFormatException e) {
+            } catch (NumberFormatException ignored) {
+
             }
         }
 

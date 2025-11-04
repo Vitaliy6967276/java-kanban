@@ -155,6 +155,7 @@ public class TaskHandler extends BaseHttpHandler implements HttpHandler {
                     return Endpoint.DELETE_TASK;
                 }
             } catch (NumberFormatException e) {
+                throw e;
             }
         }
 
@@ -216,5 +217,5 @@ public class TaskHandler extends BaseHttpHandler implements HttpHandler {
         }
     }
 
-    enum Endpoint {GET_TASKS, GET_TASK_BY_ID, POST_TASK, DELETE_TASK, UNKNOWN}
+    enum Endpoint { GET_TASKS, GET_TASK_BY_ID, POST_TASK, DELETE_TASK, UNKNOWN }
 }
