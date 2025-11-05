@@ -182,7 +182,7 @@ public class InMemoryTaskManager implements TaskManager {
         int epicId = subtask.getEpicId();
         Epic parentEpic = epics.get(epicId);
         if (parentEpic == null) {
-            throw new IllegalArgumentException("Эпик с ID " + epicId + " не существует");
+            throw new TaskNotFoundException("Эпик с ID " + epicId + " не существует");
         }
         if (isTaskOverlappingWithOthers(subtask)) {
             throw new IllegalArgumentException(
@@ -230,8 +230,6 @@ public class InMemoryTaskManager implements TaskManager {
         Epic existingEpic = epics.get(newEpic.getId());
         existingEpic.setName(newEpic.getName());
         existingEpic.setDescription(newEpic.getDescription());
-        existingEpic.updateEpicTime();
-        existingEpic.updateStatus();
     }
 
     @Override
@@ -293,8 +291,6 @@ public class InMemoryTaskManager implements TaskManager {
             historyManager.remove(subtask.getId());
             prioritizedTasks.remove(subtask);
         }
-        epic.clearSubtasks();
-        prioritizedTasks.remove(epic);
     }
 
     @Override

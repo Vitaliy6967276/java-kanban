@@ -1,11 +1,13 @@
+package handlers;
+
+import adapters.DurationAdapter;
+import adapters.LocalDateTimeAdapter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.TypeAdapter;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonToken;
-import com.google.gson.stream.JsonWriter;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import enums.Endpoint;
+import exceptions.TaskNotFoundException;
 import managers.TaskManager;
 import tasks.Epic;
 import tasks.Subtask;
@@ -14,7 +16,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -75,11 +76,11 @@ public class EpicHandler extends BaseHttpHandler implements HttpHandler {
             return;
         }
         int id = idOpt.get();
-        Epic epic = taskManager.getEpicById(id);
-        if (epic != null) {
+        try {
+            Epic epic = taskManager.getEpicById(id);
             String response = gson.toJson(epic);
             sendText(exchange, response);
-        } else {
+        } catch (TaskNotFoundException e) {
             sendNotFound(exchange);
         }
     }
@@ -197,67 +198,5 @@ public class EpicHandler extends BaseHttpHandler implements HttpHandler {
         return Endpoint.UNKNOWN;
     }
 
-    private static class DurationAdapter extends TypeAdapter<Duration> {
 
-        @Override
-        public void write(JsonWriter jsonWriter, Duration duration) throws IOException {
-            if (duration == null) {
-                jsonWriter.nullValue();
-            } else {
-                jsonWriter.value(duration.toMinutes());
-            }
-        }
-
-        @Override
-        public Duration read(JsonReader jsonReader) throws IOException {
-            if (jsonReader.peek() == JsonToken.NULL) {
-                jsonReader.nextNull();
-                return null;
-            }
-            String value = jsonReader.nextString();
-            try {
-                long minutes = Long.parseLong(value);
-                return Duration.ofMinutes(minutes);
-            } catch (NumberFormatException e) {
-                throw new IOException("Некорректное значение duration: должно быть числом минут, получено: " + value,
-                        e);
-            }
-        }
-    }
-
-    private static class LocalDateTimeAdapter extends TypeAdapter<LocalDateTime> {
-        private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
-
-        @Override
-        public void write(JsonWriter jsonWriter, LocalDateTime localDateTime) throws IOException {
-            if (localDateTime == null) {
-                jsonWriter.nullValue();
-            } else {
-                jsonWriter.value(localDateTime.format(FORMATTER));
-            }
-        }
-
-        @Override
-        public LocalDateTime read(JsonReader jsonReader) throws IOException {
-            if (jsonReader.peek() == JsonToken.NULL) {
-                jsonReader.nextNull();
-                return null;
-            }
-            String dateString = jsonReader.nextString();
-            try {
-                return LocalDateTime.parse(dateString, FORMATTER);
-            } catch (Exception e) {
-                throw new IOException("Некорректный формат startTime: ожидался dd-MM-yyyy HH:mm, получено: " + dateString, e);
-            }
-        }
-    }
-
-    enum Endpoint {
-        GET_EPICS,
-        GET_EPIC_BY_ID,
-        POST_EPIC,
-        DELETE_EPIC,
-        GET_EPIC_SUBTASKS,
-        UNKNOWN
-    }
 }
