@@ -9,22 +9,11 @@ public class Epic extends Task {
 
     private final ArrayList<Subtask> subtasks = new ArrayList<>();
     private LocalDateTime endTime;
-    private LocalDateTime startTime;
-    private Duration duration;
 
     public Epic(String name, String description) {
         super(name, description);
         updateEpicTime();
-    }
-
-    @Override
-    public Duration getDuration() {
-        return duration;
-    }
-
-    @Override
-    public LocalDateTime getStartTime() {
-        return startTime;
+        updateStatus();
     }
 
     @Override
@@ -38,6 +27,7 @@ public class Epic extends Task {
         }
         subtasks.add(subtask);
         updateEpicTime();
+        updateStatus();
     }
 
     public ArrayList<Subtask> getSubtasks() {
@@ -47,11 +37,13 @@ public class Epic extends Task {
     public void removeSubtask(Subtask subtask) {
         subtasks.remove(subtask);
         updateEpicTime();
+        updateStatus();
     }
 
     public void clearSubtasks() {
         subtasks.clear();
         updateEpicTime();
+        updateStatus();
     }
 
     public void updateStatus() {
@@ -85,6 +77,12 @@ public class Epic extends Task {
     }
 
     public void updateEpicTime() {
+        if (subtasks.isEmpty()) {
+            super.setDuration(null);
+            super.setStartTime(null);
+            this.endTime = null;
+            return;
+        }
         Duration total = Duration.ZERO;
         for (Subtask subtask : subtasks) {
             if (subtask.getDuration() != null) {
@@ -104,8 +102,8 @@ public class Epic extends Task {
                 .max(LocalDateTime::compareTo)
                 .orElse(null);
 
-        this.duration = total;
-        this.startTime = earliestStart;
+        super.setDuration(total);
+        super.setStartTime(earliestStart);
         this.endTime = latestEnd;
     }
 

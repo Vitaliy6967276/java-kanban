@@ -1,5 +1,6 @@
 package managers;
 
+import exceptions.TaskNotFoundException;
 import history.HistoryManager;
 import tasks.Epic;
 import tasks.Subtask;
@@ -122,27 +123,33 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Task getTaskById(int id) {
         Task task = tasks.get(id);
-        if (task != null) {
-            historyManager.add(task);
+        if (task == null) {
+            throw new TaskNotFoundException("Задача с ID " + id + " не найдена");
         }
+        historyManager.add(task);
+
         return task;
     }
 
     @Override
     public Epic getEpicById(int id) {
         Epic epic = epics.get(id);
-        if (epic != null) {
-            historyManager.add(epic);
+        if (epic == null) {
+            throw new TaskNotFoundException("Эпик с ID " + id + " не найдена");
         }
+        historyManager.add(epic);
+
         return epic;
     }
 
     @Override
     public Subtask getSubtaskById(int id) {
         Subtask subtask = subtasks.get(id);
-        if (subtask != null) {
-            historyManager.add(subtask);
+        if (subtask == null) {
+            throw new TaskNotFoundException("Подзадача с ID " + id + " не найдена");
         }
+        historyManager.add(subtask);
+
         return subtask;
     }
 
@@ -175,7 +182,7 @@ public class InMemoryTaskManager implements TaskManager {
         int epicId = subtask.getEpicId();
         Epic parentEpic = epics.get(epicId);
         if (parentEpic == null) {
-            throw new IllegalArgumentException("Эпик с ID " + epicId + " не существует");
+            throw new TaskNotFoundException("Эпик с ID " + epicId + " не существует");
         }
         if (isTaskOverlappingWithOthers(subtask)) {
             throw new IllegalArgumentException(
@@ -277,18 +284,12 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void deleteEpic(int id) {
         Epic epic = epics.remove(id);
-        if (epic != null) {
-            historyManager.remove(id);
-            if (epic.getStartTime() != null) {
-                prioritizedTasks.remove(epic);
-            }
-            for (Subtask subtask : epic.getSubtasks()) {
-                historyManager.remove(subtask.getId());
-                subtasks.remove(subtask.getId());
-                if (subtask.getStartTime() != null) {
-                    prioritizedTasks.remove(subtask);
-                }
-            }
+        if (epic == null) return;
+        historyManager.remove(id);
+        for (Subtask subtask : epic.getSubtasks()) {
+            subtasks.remove(subtask.getId());
+            historyManager.remove(subtask.getId());
+            prioritizedTasks.remove(subtask);
         }
     }
 
